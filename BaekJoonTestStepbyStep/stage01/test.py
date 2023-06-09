@@ -4,3 +4,4 @@ def sum():
     print(f"{a+b}")
     
 sum()
+
