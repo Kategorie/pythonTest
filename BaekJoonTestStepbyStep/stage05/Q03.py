@@ -1,8 +1,9 @@
-N = int(input())
-Nary = input()
+S = []
+T = int(input())
+for i in range(T):
+    s = input()
+    S.append(s)
 
-Nary = list(map(int, Nary))
-res = 0
-for i in range(N):
-    res += Nary[i]
-print(res)
+for j in range(T):
+    print(S[j][0],end="")
+    print(S[j][-1])
