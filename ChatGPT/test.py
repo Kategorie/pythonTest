@@ -1,3 +1,6 @@
+'''
+chat-gpt api 기본 사용법 ()
+'''
 import openai
 
 openai.api_key = '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'
@@ -16,3 +19,4 @@ while True:
     chat_response = completion.choices[0].message.content
     print(f'ChatGPT: {chat_response}')
     messages.append({"role":"assistant", "content":chat_response})
+
