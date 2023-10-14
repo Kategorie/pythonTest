@@ -2,7 +2,8 @@
     "editor.wordWrap": "on",
     "python.analysis.typeCheckingMode": "basic",
     "[python]": {
-        "editor.defaultFormatter": "ms-python.python"
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true
 }
