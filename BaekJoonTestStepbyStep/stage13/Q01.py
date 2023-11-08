@@ -1,4 +1,3 @@
-
 # 삽입정렬
 N = int(input())
 list_A = []
