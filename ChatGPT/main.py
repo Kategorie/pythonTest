@@ -2,16 +2,22 @@ import openai  # chat-gpt
 import os  # 폴더 및 파일 접근
 import fnmatch  # 파일에 대한 작업
 import shutil  # 파일 복사
+import json  # S to T json utf 변환
 
 """
 # 키 만들때 1번만 보여주니 잃어버리면 재생성 필요함.
 openai.api_key = "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"
 
 # 음성 -> 문자
+# 서울의 중심에는 한강 하류가 동에서 서쪽으로 흐르고 있다.
 audio_file = open("./test.m4a", "rb")
 
 # audio -> text
-transcript = openai.Audio.transcribe("whisper-1", audio_file, "text")
+transcript = openai.Audio.transcribe(model="whisper-1", file=audio_file)
+# json으로 받아올 때 아스키 값으로 변환되서 UTF-8로 인코딩 하는 옵션을 추가
+ts2str = json.dumps(transcript, ensure_ascii=False)
+
+print(ts2str)
 """
 
 
