@@ -20,9 +20,9 @@ def counting(arr, K):
 
 
 if __name__ == "__main__":
-    N = int(input().rstrip())
-    n = []
-    for i in range(N):
-        n.append(int(input().rstrip()))
+    N = 10  # int(input().rstrip())
+    n = [10, 2, 4, 5, 3, 5, 2, 6, 1, 2]
+    # for i in range(N):
+    #    n.append(int(input().rstrip()))
 
-    countint(A, N)
+    counting(n, N)

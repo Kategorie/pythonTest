@@ -1,24 +1,6 @@
-import openai  # chat-gpt
 import os  # 폴더 및 파일 접근
 import fnmatch  # 파일에 대한 작업
 import shutil  # 파일 복사
-import json  # S to T json utf 변환
-
-"""
-# 키 만들때 1번만 보여주니 잃어버리면 재생성 필요함.
-openai.api_key = "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"
-
-# 음성 -> 문자
-# 서울의 중심에는 한강 하류가 동에서 서쪽으로 흐르고 있다.
-audio_file = open("./test.m4a", "rb")
-
-# audio -> text
-transcript = openai.Audio.transcribe(model="whisper-1", file=audio_file)
-# json으로 받아올 때 아스키 값으로 변환되서 UTF-8로 인코딩 하는 옵션을 추가
-ts2str = json.dumps(transcript, ensure_ascii=False)
-
-print(ts2str)
-"""
 
 
 # 문자 -> 단어 추출 (문장에서 단어 추출하는 법, 또는 검색하는 알고리즘)
@@ -74,7 +56,7 @@ class openFile:
         os.startfile("c:\\폴더명\\파일명.xlsx")
         print("create openFile")
 
-    def open_file():
+    def open_file(self):
         for file in os.listdir("c:\\폴더명\\"):
             # 해당 파일이 엑셀 파일이면 수행할 작업
             if fnmatch.fnmatch(file, "*.xlsx"):
@@ -83,12 +65,12 @@ class openFile:
             elif fnmatch.fnmatch(file, "*.csv"):
                 pass
 
-    def copy_file():
+    def copy_file(self):
         file_from = "c:\\폴더명\\파일명.xlsx"
         file_to = "c:\\폴더명\\파일명.xlsx"
         shutil.copy(file_from, file_to)
 
-    def delete_file():
+    def delete_file(self):
         os.remove("c:\\폴더명\\파일명.xlsx")
 
 
