@@ -2,50 +2,14 @@ import os  # 폴더 및 파일 접근
 import fnmatch  # 파일에 대한 작업
 import shutil  # 파일 복사
 
+####################################################################
+# 작성 함수 리스트
+from fileFunction import *
+from folderFunction import *
 
+####################################################################
 # 문자 -> 단어 추출 (문장에서 단어 추출하는 법, 또는 검색하는 알고리즘)
 # 특정 단어에 대해서 해당 기능 호출
-# 폴더 열기
-class openFolder:
-    classCount = 0
-    folder_list = ""  # 클래스 변수(클래스 생성시 고정값)
-
-    def __init__(self):  # -> 는 리턴값이 어떤지 명시해주기 위해서 사용한다.
-        print("create openFolder")
-        openFolder.classCount += 1
-        print(openFolder.classCount)  # 클래스 변수 접근 방법
-
-    def init_root_path(self, text_path):
-        self.root_path = text_path
-        print(self.root_path)  # 인스턴스 변수(각 클래스에 별개로 저장되는 값)
-        print("check root_path")
-
-    def init_folder_list(self):
-        self.folder_list = [
-            name
-            for name in os.listdir(self.root_path)
-            if os.path.isdir(os.path.join(self.root_path, name))
-        ]
-        print(self.folder_list)
-        print("check folder_list")
-
-    def create_folder(self):
-        for folder in self.folder_list:
-            try:
-                if not os.path.exists(self.root_path + folder + "\\새폴더명1\\"):
-                    os.makedirs(self.root_path + folder + "\\새폴더명1\\")
-            except OSError:
-                print(
-                    "Error: " + self.root_path + folder + "\\새폴더명1\\" + "폴더 생성에 실패했습니다."
-                )
-
-            try:
-                if not os.path.exists(self.root_path + folder + "\\새폴더명2\\"):
-                    os.makedirs(self.root_path + folder + "\\새폴더명2\\")
-            except OSError:
-                print(
-                    "Error: " + self.root_path + folder + "\\새폴더명2\\" + "폴더 생성에 실패했습니다."
-                )
 
 
 # 파일 실행
@@ -74,11 +38,34 @@ class openFile:
         os.remove("c:\\폴더명\\파일명.xlsx")
 
 
+# 루트 경로 받아와서 파일이나 폴더 탐색
+class findFileWithFolder:
+    file_list = []
+
+    def __init__(self):
+        pass
+
+    # 찾고자 하는 경로에서 하위로 찾을 파일 및 폴더 이름 검색
+    def find_file(self, root_path, find_name):
+        print("파일 탐색")
+        # 현재 보고 있는 폴더 이름, parent 폴더 내 폴더 리스트, parent 폴더 내 파일 리스트
+        for parent, _, files in os.walk(root_path):
+            for f in files:
+                if f == find_name:
+                    self.file_list.append(f)
+
+        print(self.file_list)
+
+
 # 크롬 열기
 # 크롬 열고 검색하기
 
 # 메인
 if __name__ == "__main__":
-    aa = openFolder()
-    aa.init_root_path("D:\Download\Garage\Garage")
-    aa.init_folder_list()
+    folder_test = openFolder()
+    folder_name = "hello"
+
+    folder_test.init_root_path("D:/Download/Garage/Garage")
+    folder_test.init_folder_list()
+    folder_test.init_file_list()
+    folder_test.create_folder(folder_name)
