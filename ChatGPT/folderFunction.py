@@ -1,4 +1,5 @@
 import os  # 폴더 및 파일 접근
+import win32api  # 메시지 팝업
 
 
 # 루트 경로 받아와서 폴더 열기
@@ -16,6 +17,7 @@ class openFolder:
     # 루트 경로 설정
     def init_root_path(self, root_path):
         print("check root_path")
+        os.startfile(root_path)
         self.root_path = root_path
         print(self.root_path)  # 인스턴스 변수(각 클래스에 별개로 저장되는 값)
 
@@ -38,7 +40,7 @@ class openFolder:
         print(self.file_list)
 
 
-class creathFolder:
+class createFolder:
     root_path = ""
 
     def __init__(self):
@@ -51,6 +53,9 @@ class creathFolder:
             if not os.path.exists(self.root_path + "\\" + folder_name + "\\"):
                 os.makedirs(self.root_path + "\\" + folder_name + "\\")
                 print(folder_name, "폴더를 생성했습니다.")
+            else:
+                print(folder_name, "폴더가 해당 위치에 있습니다.")
+                win32api.MessageBox(0, "폴더가 해당 위치에 있습니다.", "", 64, 0)
         except OSError:
             print(
                 "Error: "

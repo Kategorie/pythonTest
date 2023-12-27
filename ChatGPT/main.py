@@ -2,6 +2,7 @@ import os  # 폴더 및 파일 접근
 import fnmatch  # 파일에 대한 작업
 import shutil  # 파일 복사
 
+
 ####################################################################
 # 작성 함수 리스트
 from fileFunction import *
@@ -14,13 +15,17 @@ from folderFunction import *
 
 # 파일 실행
 class openFile:
-    # 이 클래스는 openFolder 클래스의 하위 클래스로 openFolder에서 file 작업을 모두 처리하도록 작업.
-    def __init__(self):
-        # 파일 실행
-        os.startfile("c:\\폴더명\\파일명.xlsx")
-        print("create openFile")
+    root_path = ""
+    file_name = ""
+    open_path = ""
 
-    def open_file(self):
+    # 이 클래스는 openFolder 클래스의 하위 클래스로 openFolder에서 file 작업을 모두 처리하도록 작업.
+    def __init__(self, root_path):
+        print("create openFile")
+        self.root_path = root_path
+
+    def open_file(self, file_name):  # <- here
+        self.open_path = os.path.join(self.root_path + file_name)
         for file in os.listdir("c:\\폴더명\\"):
             # 해당 파일이 엑셀 파일이면 수행할 작업
             if fnmatch.fnmatch(file, "*.xlsx"):
@@ -62,10 +67,11 @@ class findFileWithFolder:
 
 # 메인
 if __name__ == "__main__":
-    folder_test = openFolder()
+    folder_open = openFolder()
+    folder_create = createFolder()
     folder_name = "hello"
 
-    folder_test.init_root_path("D:/Download/Garage/Garage")
-    folder_test.init_folder_list()
-    folder_test.init_file_list()
-    folder_test.create_folder(folder_name)
+    folder_open.init_root_path("D:/Download/Garage/Garage")
+    folder_open.init_folder_list()
+    folder_open.init_file_list()
+    folder_create.create_folder(folder_name)
