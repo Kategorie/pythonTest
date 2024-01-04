@@ -1,3 +1,4 @@
+print(type(int))
 pass
 N = int(input())
 A = []
