@@ -6,10 +6,13 @@ N = int(input())
 R = list(map(int, sys.stdin.readline().split()))
 res = {}
 for i in S:
-    if i in res.keys():
+    if i in res:
         res[i] += 1
     else:
         res[i] = 1
 
 for j in R:
-    print(res[j], end=" ")
+    if j in res.keys():
+        print(res[j], end=" ")
+    else:
+        print(0)
