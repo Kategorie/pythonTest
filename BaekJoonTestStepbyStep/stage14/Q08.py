@@ -1,13 +1,14 @@
-import math
 import sys
 
-S = sys.stdin.readline().rstrip()
-res = set()
-for i in range(2, len(S)+1):
-    tmp = S[:i]
-    math.factorial(len(tmp))
+if __name__ == "__main__":
+    S = sys.stdin.readline().rstrip()
 
+    start = 0
+    end = 1
+    res = set()
+    for i in range(len(S)):
+        for j in range(i, len(S)):
+            tmp = S[start + i : end + j]
+            res.add(tmp)
 
-print(len(S) + len(res))
-
-5 4 3 2 1 의 합에서 중복을 제거
+    print(len(res))
