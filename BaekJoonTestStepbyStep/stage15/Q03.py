@@ -1,6 +1,13 @@
 a, b = map(int, input().split())  # 분자 분모
 c, d = map(int, input().split())
 
+
+"""
+# 알고리즘은 맞는데 시간 초과됨
+a, b = map(int, input().split())  # 분자 분모
+c, d = map(int, input().split())
+# a c 2 3
+# b d 7 5
 A = a * d
 B = b * d  # B = D
 C = c * b
@@ -14,3 +21,4 @@ for i in range(1, res1 + 1):
         res2 /= i
 
 print(int(res1), int(res2))
+"""
