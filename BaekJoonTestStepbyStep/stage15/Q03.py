@@ -3,7 +3,7 @@ def euclideean(small, big):
     if res == 0:
         return small
     else:
-        return euclideean(small, res)
+        return euclideean(res, small)
 
 
 if __name__ == "__main__":
@@ -17,9 +17,9 @@ if __name__ == "__main__":
 
     res1 = A + C
     res2 = B
-    euclideean(res1, res2)
+    res_euc = euclideean(res1, res2)
 
-    print(int(res1), int(res2))
+    print(int(res1 // res_euc), int(res2 // res_euc))
 
 """
 # 알고리즘은 맞는데 시간 초과됨
