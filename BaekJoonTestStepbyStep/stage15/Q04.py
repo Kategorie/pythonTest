@@ -16,13 +16,16 @@ if __name__ == "__main__":
     N = int(input())
     L = []
     R = []
+    gcd_L = []
     for i in range(N):
         L.append(int(input()))
         if i > 0:
             R.append(L[i] - L[i - 1])
 
     for j in range(len(R)):
-        gcd = euclideean(R[j - 1], L[j])
-        R.append(gcd)
+        gcd = euclideean(R[j - 1], R[j])
+        gcd_L.append(gcd)
 
-    print()
+    d = min(gcd_L)  # 간격
+    res = ((L[len(L) - 1] - L[0]) // d + 1) - N
+    print(res)
