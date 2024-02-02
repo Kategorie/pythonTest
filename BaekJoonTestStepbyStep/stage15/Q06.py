@@ -4,8 +4,10 @@ def Eratos(data, M, N):
             data[i] = False
         else:
             if data[i]:
-                for j in range(2, N // i):
+                j = 2
+                while i * j <= N:
                     data[i * j] = False
+                    j += 1
 
 
 if __name__ == "__main__":
@@ -13,7 +15,7 @@ if __name__ == "__main__":
     res = [True] * (N + 1)
     Eratos(res, M, N)
 
-    for i in range(len(res)):
+    for i in range(M, N + 1):
         if res[i]:
             print(i)
 
