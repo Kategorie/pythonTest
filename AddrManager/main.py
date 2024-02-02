@@ -11,7 +11,9 @@ class GUIApp:
         self.root.title("주소 입력 GUI")
 
         # 통신사 체크, 통신사 예외 처리용 변수 생성 kt 인지 sk 인지 lg 인지 확인용
-        self.check_communication = {}
+        self.check_landlord_communication = ""
+        self.check_tenant_communication = ""
+        self.check_realtor_communication = ""
 
         self.previous_values = {
             "area": "",
@@ -176,20 +178,22 @@ class GUIApp:
         number_input = self.number_entry.get()
 
         # Validate phone numbers based on checkbox states
+        # flag 0 : landlord, 1 : tenant, 2:realtor
         landlord_phone_input = (
             ""
             if self.allow_blank_landlord.get()
-            else self.get_phone_number(self.landlord_phone_entries)
+            else self.get_phone_number(self.landlord_phone_entries, 0)
         )
+
         tenant_phone_input = (
             ""
             if self.allow_blank_tenant.get()
-            else self.get_phone_number(self.tenant_phone_entries)
+            else self.get_phone_number(self.tenant_phone_entries, 1)
         )
         realtor_phone_input = (
             ""
             if self.allow_blank_realtor.get()
-            else self.get_phone_number(self.realtor_phone_entries)
+            else self.get_phone_number(self.realtor_phone_entries, 2)
         )
 
         # 입력값이 모두 있는지 확인
@@ -198,6 +202,9 @@ class GUIApp:
             return
 
         file_path = self.file_entry.get()
+        check_landlord_communication = self.check_landlord_communication
+        check_tenant_communication = self.check_tenant_communication
+        check_realtor_communication = self.check_realtor_communication
 
         # 엑셀 파일에 입력값 추가
         self.create_or_update_excel(
@@ -205,8 +212,11 @@ class GUIApp:
             area_input,
             dong_input,
             number_input,
+            check_landlord_communication,
             landlord_phone_input,
+            check_tenant_communication,
             tenant_phone_input,
+            check_realtor_communication,
             realtor_phone_input,
         )  # 여기에 입력 값 추가
 
@@ -289,7 +299,17 @@ class GUIApp:
         self.file_entry.insert(0, file_path)
 
     def create_or_update_excel(
-        self, file_path, area, dong, number, landlord_phone, tenant_phone, realtor_phone
+        self,
+        file_path,
+        area,
+        dong,
+        number,
+        ch_landlord_p,
+        landlord_phone,
+        ch_tenant_p,
+        tenant_phone,
+        ch_realtor_p,
+        realtor_phone,
     ):
         try:
             if not self.file_exists(file_path):
@@ -311,7 +331,17 @@ class GUIApp:
             """
             # 각각의 값이 하나의 셀에 입력되도록 수정
             sheet.append(
-                [area, dong, number, landlord_phone, tenant_phone, realtor_phone]
+                [
+                    area,
+                    dong,
+                    number,
+                    ch_landlord_p,
+                    landlord_phone,
+                    ch_tenant_p,
+                    tenant_phone,
+                    ch_realtor_p,
+                    realtor_phone,
+                ]
             )
 
             wb.save(file_path)
@@ -334,8 +364,11 @@ class GUIApp:
                 "지역",
                 "동",
                 "지번",
+                "임대인 통신사",
                 "임대인 전화번호",
+                "임차인 통신사",
                 "임차인 전화번호",
+                "부동산 통신사",
                 "부동산 전화번호",
             ]
         )
@@ -379,11 +412,101 @@ class GUIApp:
             entry.delete(0, tk.END)
             entry.insert(0, value[:max_length])
 
-    def get_phone_number(self, entries):  # 여기서 예외처리 후 전역 변수에 집어넣기
-        if entries[2].get()[0] == 
-        elif 통신사 체크:
+    def get_phone_number(self, entries, flag):
+        # flag 0 : landlord, 1 : tenant, 2:realtor
+        if flag == 0:  # landlord
+            self.check_communication_entries(entries, self.check_landlord_communication)
+        elif flag == 1:  # tenant
+            self.check_communication_entries(entries, self.check_tenant_communication)
+        else:  # realtor
+            self.check_communication_entries(entries, self.check_realtor_communication)
 
         return "-".join(entry.get() for entry in entries if entry.get())
+
+    def check_communication_entries(self, entries, check_comm):
+        if entries[2].get()[0] == 2:
+            if entries[2].get()[1] == 0:
+                check_comm = "SKT"
+            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "LGU+"
+            elif 5 <= entries[2].get()[1]:
+                check_comm = "KT"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 3:
+            if entries[2].get()[1] == 0:
+                check_comm = "KT"
+            elif entries[2].get()[1] == 1:
+                check_comm = "SKT"
+            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "KT"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
+                check_comm = "SKT"
+            elif entries[2].get()[1] == 9:
+                check_comm = "LGU+"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 4:
+            if entries[2].get()[1] == 0:
+                check_comm = "SKT"
+            elif entries[2].get()[1] == 1:
+                check_comm = "SKT"
+            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "KT"
+            elif 5 <= entries[2].get()[1]:
+                check_comm = "SKT"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 5:
+            if entries[2].get()[1] == 0:
+                check_comm = "SKT"
+            elif entries[2].get()[1] == 1:
+                check_comm = "KT"
+            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "SKT"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
+                check_comm = "LGU+"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 6:
+            if 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "SKT"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
+                check_comm = "KT"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 7:
+            if entries[2].get()[1] == 1:
+                check_comm = "SKT"
+            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "KT"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 7:
+                check_comm = "LGU+"
+            elif entries[2].get()[1] == 9:
+                check_comm = "LGU+"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 8:
+            if 0 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "LGU+"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 9:
+                check_comm = "SKT"
+            else:
+                check_comm = ""
+
+        elif entries[2].get()[0] == 9:
+            if 0 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
+                check_comm = "SKT"
+            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 9:
+                check_comm = "KT"
+            else:
+                check_comm = ""
 
 
 if __name__ == "__main__":
