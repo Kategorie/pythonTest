@@ -11,9 +11,9 @@ class GUIApp:
         self.root.title("주소 입력 GUI")
 
         # 통신사 체크, 통신사 예외 처리용 변수 생성 kt 인지 sk 인지 lg 인지 확인용
-        self.check_landlord_communication = ""
-        self.check_tenant_communication = ""
-        self.check_realtor_communication = ""
+        self.check_landlord_communication = {"comm": ""}
+        self.check_tenant_communication = {"comm": ""}
+        self.check_realtor_communication = {"comm": ""}
 
         self.previous_values = {
             "area": "",
@@ -202,9 +202,9 @@ class GUIApp:
             return
 
         file_path = self.file_entry.get()
-        check_landlord_communication = self.check_landlord_communication
-        check_tenant_communication = self.check_tenant_communication
-        check_realtor_communication = self.check_realtor_communication
+        check_landlord_communication = self.check_landlord_communication["comm"]
+        check_tenant_communication = self.check_tenant_communication["comm"]
+        check_realtor_communication = self.check_realtor_communication["comm"]
 
         # 엑셀 파일에 입력값 추가
         self.create_or_update_excel(
@@ -424,89 +424,89 @@ class GUIApp:
         return "-".join(entry.get() for entry in entries if entry.get())
 
     def check_communication_entries(self, entries, check_comm):
-        if entries[2].get()[0] == 2:
-            if entries[2].get()[1] == 0:
-                check_comm = "SKT"
-            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "LGU+"
-            elif 5 <= entries[2].get()[1]:
-                check_comm = "KT"
+        if int(entries[2].get()[0]) == 2:
+            if int(entries[2].get()[1]) == 0:
+                check_comm["comm"] = "SKT"
+            elif 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "LGU+"
+            elif 5 <= int(entries[2].get()[1]):
+                check_comm["comm"] = "KT"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 3:
-            if entries[2].get()[1] == 0:
-                check_comm = "KT"
-            elif entries[2].get()[1] == 1:
-                check_comm = "SKT"
-            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "KT"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
-                check_comm = "SKT"
-            elif entries[2].get()[1] == 9:
-                check_comm = "LGU+"
+        elif int(entries[2].get()[0]) == 3:
+            if int(entries[2].get()[1]) == 0:
+                check_comm["comm"] = "KT"
+            elif int(entries[2].get()[1]) == 1:
+                check_comm["comm"] = "SKT"
+            elif 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "KT"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 8:
+                check_comm["comm"] = "SKT"
+            elif int(entries[2].get()[1]) == 9:
+                check_comm["comm"] = "LGU+"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 4:
-            if entries[2].get()[1] == 0:
-                check_comm = "SKT"
-            elif entries[2].get()[1] == 1:
-                check_comm = "SKT"
-            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "KT"
-            elif 5 <= entries[2].get()[1]:
-                check_comm = "SKT"
+        elif int(entries[2].get()[0]) == 4:
+            if int(entries[2].get()[1]) == 0:
+                check_comm["comm"] = "SKT"
+            elif int(entries[2].get()[1]) == 1:
+                check_comm["comm"] = "SKT"
+            elif 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "KT"
+            elif 5 <= int(entries[2].get()[1]):
+                check_comm["comm"] = "SKT"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 5:
-            if entries[2].get()[1] == 0:
-                check_comm = "SKT"
-            elif entries[2].get()[1] == 1:
-                check_comm = "KT"
-            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "SKT"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
-                check_comm = "LGU+"
+        elif int(entries[2].get()[0]) == 5:
+            if int(entries[2].get()[1]) == 0:
+                check_comm["comm"] = "SKT"
+            elif int(entries[2].get()[1]) == 1:
+                check_comm["comm"] = "KT"
+            elif 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "SKT"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 8:
+                check_comm["comm"] = "LGU+"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 6:
-            if 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "SKT"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 8:
-                check_comm = "KT"
+        elif int(entries[2].get()[0]) == 6:
+            if 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "SKT"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 8:
+                check_comm["comm"] = "KT"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 7:
-            if entries[2].get()[1] == 1:
-                check_comm = "SKT"
-            elif 2 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "KT"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 7:
-                check_comm = "LGU+"
-            elif entries[2].get()[1] == 9:
-                check_comm = "LGU+"
+        elif int(entries[2].get()[0]) == 7:
+            if int(entries[2].get()[1]) == 1:
+                check_comm["comm"] = "SKT"
+            elif 2 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "KT"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 7:
+                check_comm["comm"] = "LGU+"
+            elif int(entries[2].get()[1]) == 9:
+                check_comm["comm"] = "LGU+"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 8:
-            if 0 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "LGU+"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 9:
-                check_comm = "SKT"
+        elif int(entries[2].get()[0]) == 8:
+            if 0 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "LGU+"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 9:
+                check_comm["comm"] = "SKT"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
-        elif entries[2].get()[0] == 9:
-            if 0 <= entries[2].get()[1] and entries[2].get()[1] <= 4:
-                check_comm = "SKT"
-            elif 5 <= entries[2].get()[1] and entries[2].get()[1] <= 9:
-                check_comm = "KT"
+        elif int(entries[2].get()[0]) == 9:
+            if 0 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 4:
+                check_comm["comm"] = "SKT"
+            elif 5 <= int(entries[2].get()[1]) and int(entries[2].get()[1]) <= 9:
+                check_comm["comm"] = "KT"
             else:
-                check_comm = ""
+                check_comm["comm"] = ""
 
 
 if __name__ == "__main__":
