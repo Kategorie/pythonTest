@@ -22,9 +22,9 @@ if __name__ == "__main__":
     Eratos(res, r_m)
 
     for j in inp:
-        for k in range(2, int(j/2)+1):
+        for k in range(2, int(j / 2) + 1):
             if res[k]:
-                
+                pass
 
     for i in inp:
         if inp == 0:
