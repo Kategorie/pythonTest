@@ -5,6 +5,8 @@ from pydub import AudioSegment
 from pydub.playback import play
 from music21 import stream, meter, tempo, note, metadata, converter
 
+score = stream.Score()
+
 
 class AudioConverterGUI:
     def __init__(self, master):
@@ -88,7 +90,6 @@ class AudioConverterGUI:
 
         # 악보 및 MIDI를 위한 Music21 Stream 생성
         score = stream.Score()
-        part = stream.Part()
 
         # 음원에서 pitch를 추출하여 분석
         for i, segment in enumerate(audio[::10]):  # 10ms 간격으로 처리
@@ -101,25 +102,17 @@ class AudioConverterGUI:
             n.duration = duration
 
             # Part에 Note 추가
-            part.append(n)
+            score.append(n)
 
         # Part를 Score에 추가
-        score.append(part)
-
-        # 악보 및 MIDI 파일 생성
-        score.metadata = metadata.Metadata()
-        score.metadata.title = "Generated Sheet Music"
-        score.metadata.composer = "Your Name"
-
-        score.insert(0, meter.TimeSignature("4/4"))
-        score.insert(0, tempo.MetronomeMark(number=120))
+        # ...
 
         # 악보 출력
         score.write("musicxml", output_sheet_music_path)
 
         # MIDI 파일 출력
-        midi_stream = stream.Score()
-        midi_stream.append(part)
+        self.midi_stream = stream.Score()
+        midi_stream.append(score.parts[0].makeMeasures())
         midi_stream.write("midi", output_midi_path)
 
     def display_sheet_music(self, sheet_music_path):
