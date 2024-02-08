@@ -1,3 +1,10 @@
+import music21
+
+stream = music21.stream.Stream()
+score = music21.stream.Score()
+part = music21.stream.Part()
+
+
 print()
 pass
 ####################################################################### readline 사용법

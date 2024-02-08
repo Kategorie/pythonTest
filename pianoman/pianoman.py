@@ -1,155 +1,164 @@
 import os
-import tkinter as tk
-from tkinter import filedialog
-from pydub import AudioSegment
-from pydub.playback import play
-from music21 import stream, meter, tempo, note, metadata, converter
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QHBoxLayout,
+    QWidget,
+    QFileDialog,
+    QGraphicsView,
+    QGraphicsScene,
+    QMessageBox,
+)
+import matplotlib.pyplot as plt
+import librosa
+import music21
 
-score = stream.Score()
 
+class AudioConverterApp(QMainWindow):
+    def __init__(self):
+        super().__init__()  # QMainWindow 초기화
 
-class AudioConverterGUI:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Audio Converter")
+        self.init_ui()  # AudioConverterApp 초기화
+        # 결과 악보를 저장할 변수
+        self.score = None
 
-        # 1열: 오디오 파일 입력
-        self.label_input_audio = tk.Label(master, text="Input Audio:")
-        self.label_input_audio.grid(row=0, column=0, sticky="e")
+    def init_ui(self):
+        self.setWindowTitle("Audio Converter")
 
-        self.input_audio_path = tk.Entry(master, width=40)
-        self.input_audio_path.grid(row=0, column=1)
+        # 1. 열
+        input_label = QLabel("Input Audio:")
+        self.input_line_edit = QLineEdit()
+        self.browse_button = QPushButton("Browse")
+        self.browse_button.clicked.connect(self.browse_file)
 
-        self.browse_button = tk.Button(master, text="Browse", command=self.browse_audio)
-        self.browse_button.grid(row=0, column=2)
+        # 2. 열
+        waveform_label = QLabel("Waveform:")
+        self.waveform_view = QGraphicsView()
+        self.waveform_scene = QGraphicsScene()
+        self.waveform_view.setScene(self.waveform_scene)
 
-        # 2열: 오디오 파형 디스플레이
-        self.label_waveform = tk.Label(master, text="Waveform Display:")
-        self.label_waveform.grid(row=1, column=0, sticky="e")
+        # 3. 열
+        convert_button = QPushButton("Convert")
+        convert_button.clicked.connect(self.convert_audio)
+        save_button = QPushButton("Save")
+        save_button.clicked.connect(self.save_result)
 
-        # TODO: 오디오 파형 디스플레이 추가 (예: Canvas 사용)
+        # 전체 레이아웃 설정
+        layout = QHBoxLayout()
+        column_layouts = QVBoxLayout(), QVBoxLayout(), QVBoxLayout()
+        layout.addLayout(column_layouts[0])
+        layout.addLayout(column_layouts[1])
+        layout.addLayout(column_layouts[2])
 
-        # 3열: 변환 및 저장 버튼
-        self.convert_button = tk.Button(
-            master, text="Convert", command=self.convert_audio
+        column_layouts[0].addWidget(input_label)
+        column_layouts[0].addWidget(self.input_line_edit)
+        column_layouts[0].addWidget(self.browse_button)
+
+        column_layouts[1].addWidget(waveform_label)
+        column_layouts[1].addWidget(self.waveform_view)
+
+        column_layouts[2].addWidget(convert_button)
+        column_layouts[2].addWidget(save_button)
+
+        central_widget = QWidget()
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
+
+    def browse_file(self):
+        file_dialog = QFileDialog()
+        file_dialog.setNameFilter("Audio Files (*.m4a *.mp3 *.wav *.ogg *.flac *.aac)")
+        file_dialog.exec_()
+        file_paths = file_dialog.selectedFiles()
+        if file_paths:
+            self.input_line_edit.setText(file_paths[0])
+
+            # Display waveform
+            self.display_waveform(file_paths[0])
+
+    def display_waveform(self, audio_path):
+        y, sr = librosa.load(audio_path)
+        plt = music21.graph.plot.HistogramPitchClass(
+            music21.note.Note(pitch=0), data=[y], title="Waveform", xMax=sr
         )
-        self.convert_button.grid(row=2, column=1, pady=10)
+        plt.xlimits = (0, len(y))  # x축 범위 설정
+        plt.run()
 
-        self.save_button = tk.Button(master, text="Save", command=self.save_files)
-        self.save_button.grid(row=2, column=2, pady=10)
+        image_path = "temp_waveform.png"
+        plt.write(image_path)
+        pixmap = QPixmap(image_path)
+        os.remove(image_path)
 
-    def browse_audio(self):
-        file_path = filedialog.askopenfilename(
-            filetypes=[("Audio files", "*.mp3;*.wav")]
-        )
-        self.input_audio_path.delete(0, tk.END)
-        self.input_audio_path.insert(0, file_path)
+        self.waveform_scene.clear()
+        self.waveform_scene.addPixmap(pixmap)
 
     def convert_audio(self):
-        input_audio_path = self.input_audio_path.get()
+        # Implement audio conversion logic here
+        input_audio_path = self.input_line_edit.text()
 
-        if input_audio_path:
-            output_sheet_music_path = "output_sheet_music.xml"
-            output_midi_path = "output_midi.mid"
-            self.analyze_and_create_sheet_music(
-                input_audio_path, output_sheet_music_path, output_midi_path
+        if not input_audio_path:
+            QMessageBox.critical(self, "Error", "Please select an input audio file.")
+            return
+
+        # 분석된 피아노 코드를 저장할 리스트
+        piano_notes = []
+
+        # 음악 분석 및 피아노 코드 할당
+        y, sr = librosa.load(input_audio_path)
+        pitches, magnitudes = librosa.core.pitch.piptrack(y=y, sr=sr)
+        pitches = pitches[magnitudes > 0.5]
+        estimated_pitches = []
+        for frame in pitches.T:
+            non_zero_frames = frame[frame > 0]
+            if len(non_zero_frames) > 0:
+                estimated_pitch = non_zero_frames[0]
+                estimated_pitches.append(estimated_pitch)
+
+        for pitch in estimated_pitches:
+            # 피아노 코드로 변환
+            midi_note = librosa.hz_to_midi(pitch)
+            piano_note = music21.note.Note()
+            piano_note.pitch.ps = midi_note
+            piano_notes.append(piano_note)
+
+        # 악보에 피아노 코드 추가
+        self.score = music21.stream.Score()
+        part = music21.stream.Part()
+        part.append(piano_notes)
+        self.score.append(part)
+
+    def save_result(self):
+        # Implement saving logic here
+        if not self.score:
+            QMessageBox.warning(self, "Warning", "Please convert audio first.")
+            return
+
+        file_dialog = QFileDialog()
+        file_dialog.setDefaultSuffix("png")
+        file_dialog.setNameFilter("Image Files (*.png)")
+        file_dialog.setAcceptMode(QFileDialog.AcceptSave)
+        if file_dialog.exec_():
+            save_path = file_dialog.selectedFiles()[0]
+            if not save_path.endswith(".png"):
+                save_path += ".png"
+
+            # 악보를 이미지로 저장
+            image = self.score.write(
+                "musicxml", fp="temp_score.xml", format="musicxml.png"
             )
+            image.write(save_path)
+            os.remove("temp_score.xml")
 
-            # 악보와 MIDI 파일을 새 창에 표시
-            self.display_sheet_music(output_sheet_music_path)
-            self.display_midi(output_midi_path)
-
-    def classify_pitch(self, pitch):
-        # 피아노 음계에 매핑
-        piano_mapping = {
-            "C": "C",
-            "C#": "C#",
-            "D": "D",
-            "D#": "D#",
-            "E": "E",
-            "F": "F",
-            "F#": "F#",
-            "G": "G",
-            "G#": "G#",
-            "A": "A",
-            "A#": "A#",
-            "B": "B",
-        }
-
-        # pitch를 가장 가까운 음계로 매핑
-        closest_pitch = min(
-            piano_mapping.keys(), key=lambda x: abs(pitch - piano_mapping[x])
-        )
-        return closest_pitch
-
-    def analyze_and_create_sheet_music(
-        self, mp3_file_path, output_sheet_music_path, output_midi_path
-    ):
-        # mp3 파일 로드
-        audio = AudioSegment.from_file(mp3_file_path)
-
-        # 악보 및 MIDI를 위한 Music21 Stream 생성
-        score = stream.Score()
-
-        # 음원에서 pitch를 추출하여 분석
-        for i, segment in enumerate(audio[::10]):  # 10ms 간격으로 처리
-            pitch = segment.max
-            classified_pitch = self.classify_pitch(pitch)
-            duration = segment.duration_seconds
-
-            # Music21 Note 객체 생성
-            n = note.Note(classified_pitch)
-            n.duration = duration
-
-            # Part에 Note 추가
-            score.append(n)
-
-        # Part를 Score에 추가
-        # ...
-
-        # 악보 출력
-        score.write("musicxml", output_sheet_music_path)
-
-        # MIDI 파일 출력
-        self.midi_stream = stream.Score()
-        midi_stream.append(score.parts[0].makeMeasures())
-        midi_stream.write("midi", output_midi_path)
-
-    def display_sheet_music(self, sheet_music_path):
-        new_window = tk.Toplevel(self.master)
-        new_window.title("Sheet Music Display")
-
-        # Music21 Converter를 사용하여 악보를 이미지로 변환 및 표시
-        sheet_music_image = converter.parse(sheet_music_path).show("musicxml.png")
-        image_label = tk.Label(new_window, image=sheet_music_image)
-        image_label.pack()
-
-    def display_midi(self, midi_path):
-        new_window = tk.Toplevel(self.master)
-        new_window.title("MIDI Display")
-
-        # TODO: MIDI 파일을 표시하는 방법 추가
-
-    def save_files(self):
-        # 악보와 MIDI 파일을 사용자가 지정한 위치에 저장
-        sheet_music_path = "output_sheet_music.xml"
-        midi_path = "output_midi.mid"
-
-        sheet_music_save_path = filedialog.asksaveasfilename(
-            defaultextension=".xml", filetypes=[("MusicXML files", "*.xml")]
-        )
-        midi_save_path = filedialog.asksaveasfilename(
-            defaultextension=".mid", filetypes=[("MIDI files", "*.mid")]
-        )
-
-        if sheet_music_save_path:
-            os.rename(sheet_music_path, sheet_music_save_path)
-
-        if midi_save_path:
-            os.rename(midi_path, midi_save_path)
+            QMessageBox.information(self, "Success", f"Score saved at: {save_path}")
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = AudioConverterGUI(root)
-    root.mainloop()
+    app = QApplication([])
+    window = AudioConverterApp()
+    window.show()
+    app.exec()
