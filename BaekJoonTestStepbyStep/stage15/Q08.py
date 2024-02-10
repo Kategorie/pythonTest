@@ -10,6 +10,7 @@ def Eratos(data, num):
                     j += 1
 
 
+# test
 if __name__ == "__main__":
     N = int(input())
 
