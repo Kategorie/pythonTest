@@ -19,13 +19,19 @@ if __name__ == "__main__":
         inp.append(int(input()))
 
     r_m = max(inp)
-    res = [True] * ((r_m * 2) + 1)
-    Eratos(res, r_m)
+    res = [True] * ((r_m * 2) + 1) # 소수만 남는 에라토스 테네스의 체 데이터
+    Eratos(res, r_m) # 소수 리스트
 
     for j in inp:
-        for k in range(2, int(j / 2) + 1):
-            if res[k]:
-                pass
+        for k in range(j):
+            if res[k] < j:
+                tmp = j - res[k]
+                for x in range(tmp):
+                    if tmp % x == 0:
+                        break # 소수가 아닌 경우
+                    else:
+            else:
+                break # 소수가 input 보다 클 경우
 
     for i in inp:
         if inp == 0:
@@ -36,3 +42,4 @@ if __name__ == "__main__":
                 if res[j]:
                     cnt += 1
             print(cnt)
+
