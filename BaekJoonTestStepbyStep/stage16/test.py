@@ -1,8 +1,24 @@
-import music21
+a = [1, 2, 3, 4]
+print(a.pop())
 
-stream = music21.stream.Stream()
-score = music21.stream.Score()
-part = music21.stream.Part()
+sentence = input()
+para = ("(", ")", "[", "]")
+stack = []
+
+for letter in sentence:
+    if letter in para:
+        stack.append(letter)
+        if len(stack) >= 2:
+            if stack[-2] == "(" and stack[-1] == ")":
+                stack.pop(-1)
+                stack.pop(-1)
+            elif stack[-2] == "[" and stack[-1] == "]":
+                stack.pop(-1)
+                stack.pop(-1)
+if len(stack) == 0:
+    print("yes")
+else:
+    print("no")
 
 
 print()
@@ -11,10 +27,14 @@ pass
 # map 사용 시
 import sys
 
+listA = (
+    sys.stdin.readline().split()
+)  # 그냥 이렇게 써도 알아서 리스트로 나눠 입력됨(str)
+
 a, b, c = map(int, sys.stdin.readline().split())
 # 반복 문자열 입력 시
 for i in range(10):
-    a = sys.stdin.readline().rstrip()
+    a = sys.stdin.readline().rstrip()  # 끝부분 줄바꿈 제거
 
 ####################################################################### dict 사용법
 # 응용
