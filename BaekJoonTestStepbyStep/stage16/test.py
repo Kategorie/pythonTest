@@ -1,25 +1,14 @@
-a = [1, 2, 3, 4]
-print(a.pop())
+L = [0, 1, 2, 3]
 
-sentence = input()
-para = ("(", ")", "[", "]")
-stack = []
+print(L.pop(-1))  # [0, 1, 2]
 
-for letter in sentence:
-    if letter in para:
-        stack.append(letter)
-        if len(stack) >= 2:
-            if stack[-2] == "(" and stack[-1] == ")":
-                stack.pop(-1)
-                stack.pop(-1)
-            elif stack[-2] == "[" and stack[-1] == "]":
-                stack.pop(-1)
-                stack.pop(-1)
-if len(stack) == 0:
-    print("yes")
-else:
-    print("no")
+L.pop(1)  # 1번째 원소 리턴 후 삭제
+print(L)  # [0, 2]
 
+
+####################################################################### deque 사용법
+
+# queue = deque([x for x in range(1, N + 1)])
 
 print()
 pass
