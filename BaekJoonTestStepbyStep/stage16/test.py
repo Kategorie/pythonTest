@@ -1,10 +1,8 @@
-L = [0, 1, 2, 3]
+from collections import deque
 
-print(L.pop(-1))  # [0, 1, 2]
-
-L.pop(1)  # 1번째 원소 리턴 후 삭제
-print(L)  # [0, 2]
-
+aa = deque(["A", "B", "C"])
+for n, entry in enumerate(aa):
+    aa.rotate(1)
 
 ####################################################################### deque 사용법
 

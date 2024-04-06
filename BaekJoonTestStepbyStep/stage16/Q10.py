@@ -1,48 +1,26 @@
 import sys
+from collections import deque
 
 N = int(input())
+inp_q = deque(list(map(int, sys.stdin.readline().split())))
+idx_q = deque([x for x in range(2, N + 1)])
 
-inp_q = list(map(int, sys.stdin.readline().split()))
-chk_inp = [x for x in range(1, N + 1)]
-
-cnt = inp_q.pop(0)
 print("1", end=" ")
-idx = 0
-res = 0
-for _ in range(N - 1):
-    if len(inp_q):
-        if cnt < 0:
-            tmp = idx + cnt
-            if len(inp_q) <= abs(tmp):
-                while True:
-                    tmp = -(abs(tmp) - len(inp_q))
-                    if abs(tmp) < len(inp_q):
-                        break
-                idx = inp_q.index(inp_q[tmp])
-                cnt = inp_q.pop(tmp)
-            else:
-                idx = inp_q.index(inp_q[tmp])
-                cnt = inp_q.pop(tmp)
-            res = idx + cnt
-        else:
-            idx = cnt - 1
-            if len(inp_q) <= abs(idx):
-                while True:
-                    idx = idx - len(inp_q)
-                    if abs(idx) < len(inp_q):
-                        break
-                cnt = inp_q.pop(idx)
-            else:
-                cnt = inp_q.pop(idx)
-            res = idx
-        print(res + 1, end=" ")
-    else:
-        break
+now_data = inp_q.popleft()
+while len(inp_q):
+    if 0 < now_data:
+        now_data = now_data - 1
+    inp_q.rotate(-now_data)
+    idx_q.rotate(-now_data)
+    now_data = inp_q.popleft()
+    idx = idx_q.popleft()
+    print(idx, end=" ")
 
 """
-1번
 
-
-
-zip [][] list
 """
+
+# rotate()
+# enumerate()
+
+# 1 5 3 2 4
