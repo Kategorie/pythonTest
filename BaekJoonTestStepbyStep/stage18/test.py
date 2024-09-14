@@ -1,25 +1,12 @@
-a = [1, 2, 3, 4]
-print(a.pop())
+from collections import deque
 
-sentence = input()
-para = ("(", ")", "[", "]")
-stack = []
+aa = deque(["A", "B", "C"])
+for n, entry in enumerate(aa):
+    aa.rotate(1)
 
-for letter in sentence:
-    if letter in para:
-        stack.append(letter)
-        if len(stack) >= 2:
-            if stack[-2] == "(" and stack[-1] == ")":
-                stack.pop(-1)
-                stack.pop(-1)
-            elif stack[-2] == "[" and stack[-1] == "]":
-                stack.pop(-1)
-                stack.pop(-1)
-if len(stack) == 0:
-    print("yes")
-else:
-    print("no")
+####################################################################### deque 사용법
 
+# queue = deque([x for x in range(1, N + 1)])
 
 print()
 pass
@@ -73,88 +60,11 @@ time_start = time.time()
 time_end = time.time()
 time_result = time_end - time_start
 print(str(time_result))
-####################################################################### 이건 뭐지;;
-N = int(input())
-A = []
-A = list(map(int, input().split()))
-
-M = int(input())
-B = []
-B = list(map(int, input().split()))
-
-res = []
-for i in B:
-    if A.count(i):
-        res.append(1)
-    else:
-        res.append(0)
-
-for j in res:
-    print(j, end=" ")
+#######################################################################
 """
-N = int(input())
-A = []
-for _1 in range(N):
-    A.append(map(int, input().split()))
+리스트 컴프리헨션 (2차원 리스트 초기화)
 
-M = int(input())
-B = []
-for _2 in range(M):
-    B.append(map(int, input().split()))
-
-res = []
-for i in B:
-    if A.count(i):
-        res.append(1)
-    else:
-        res.append(0)
-
-for _3 in res:
-    print(_3, end=" ")
-# 문제가 서로 섞인 느낌... 이 코드 다른 문제에서 쓸 수 있을듯
-N = 5  # int(input())
-A = [6, 3, 2, 10, -10]
-# for _1 in range(N):
-#    A.append(map(int, input().split()))
-
-M = 8  # int(input())
-B = [10, 9, -5, 2, 3, 4, 5, -10]
-# for _2 in range(M):
-#    B.append(map(int, input().split()))
-num_L = 10000000
-num_S = 100000
-ran = 200
-
-A.sort()
-res_A = [[] for _ in range(ran + 1)]
-for i in range(0, (num_L * 2 + num_S), num_S):
-    for j in A:
-        if j < (i - num_L):
-            a = i // num_S
-            res_A[i // num_S].append(j)
-            A.remove(j)
-        else:
-            pass
-## test
-for k in res_A:
-    if len(k):
-        print(k)
-    else:
-        pass
-##
-ans = []
-for k in res_A:
-    if len(k):
-        for x in B:
-            if k.count(x):
-                ans.append(1)
-            else:
-                ans.append(0)
-    else:
-        pass
-
-for _3 in ans:
-    print(_3, end=" ")
+array = [[0]*m for _ in range(n)]
 """
 #######################################################################
 """

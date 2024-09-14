@@ -1,27 +1,49 @@
 import sys
 
+<<<<<<< HEAD
 # [(()]).
+=======
+>>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
 param = ["(", ")", "[", "]"]
 while True:
-    data = sys.stdin.readline().split()
+    data = str(input())  # sys.stdin.readline()
     stack = []
+<<<<<<< HEAD
     # cnt = [0,0,0,0]
+=======
+>>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
     if data[0] == ".":
         break
     else:
         for i in data:
             if i in param:
-                stack.append(i)
+                stack.append(i)  # param 만 추출
+        k = 0
+        for j in range(len(stack)):
+            if stack[0] in [")", "]"]:
+                break
+            elif (
+                stack[(j - (k * 2))] == ")" and stack[((j - (k * 2))) - 1] == "("
+            ) or (stack[(j - (k * 2))] == "]" and stack[((j - (k * 2))) - 1] == "["):
+                stack.pop((j - (k * 2)))
+                stack.pop(((j - (k * 2))) - 1)
+                k += 1
 
+<<<<<<< HEAD
         for j in stack:
             if j == "]":
                 pass
 
         if cnt1 == 0 and cnt2 == 0:
             print("YES")
+=======
+        if len(stack):
+            print("no")
+>>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
         else:
-            print("NO")
+            print("yes")
 
+<<<<<<< HEAD
 """
 import sys
 
@@ -75,3 +97,9 @@ while True:
         else:
             print("NO")
 """
+=======
+# [(()]).
+# (].
+# )(.
+# ([)].
+>>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
