@@ -1,10 +1,11 @@
 import sys
+
 # [(()]).
-param = ["(",")","[","]"]
+param = ["(", ")", "[", "]"]
 while True:
     data = sys.stdin.readline().split()
     stack = []
-    #cnt = [0,0,0,0]
+    # cnt = [0,0,0,0]
     if data[0] == ".":
         break
     else:
@@ -14,7 +15,7 @@ while True:
 
         for j in stack:
             if j == "]":
-
+                pass
 
         if cnt1 == 0 and cnt2 == 0:
             print("YES")
