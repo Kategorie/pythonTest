@@ -1,11 +1,12 @@
 import sys
 
 # [(()]).
+import sys
+
 param = ["(", ")", "[", "]"]
 while True:
     data = str(input())  # sys.stdin.readline()
     stack = []
-    # cnt = [0,0,0,0]
     if data[0] == ".":
         break
     else:
@@ -23,12 +24,6 @@ while True:
                 stack.pop(((j - (k * 2))) - 1)
                 k += 1
 
-        for j in stack:
-            if j == "]":
-                pass
-
-        if cnt1 == 0 and cnt2 == 0:
-            print("YES")
         if len(stack):
             print("no")
         else:
