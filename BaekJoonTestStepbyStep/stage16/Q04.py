@@ -1,17 +1,11 @@
 import sys
 
-<<<<<<< HEAD
 # [(()]).
-=======
->>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
 param = ["(", ")", "[", "]"]
 while True:
     data = str(input())  # sys.stdin.readline()
     stack = []
-<<<<<<< HEAD
     # cnt = [0,0,0,0]
-=======
->>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
     if data[0] == ".":
         break
     else:
@@ -29,21 +23,17 @@ while True:
                 stack.pop(((j - (k * 2))) - 1)
                 k += 1
 
-<<<<<<< HEAD
         for j in stack:
             if j == "]":
                 pass
 
         if cnt1 == 0 and cnt2 == 0:
             print("YES")
-=======
         if len(stack):
             print("no")
->>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
         else:
             print("yes")
 
-<<<<<<< HEAD
 """
 import sys
 
@@ -97,9 +87,8 @@ while True:
         else:
             print("NO")
 """
-=======
+
 # [(()]).
 # (].
 # )(.
 # ([)].
->>>>>>> de4aa465e2bc2b97984e5008b2fb011905101303
